@@ -16,6 +16,18 @@ class WeatherDataModel {
   var weatherIcon: String = ""
   var weatherDescription: String = ""
 
+//  var date:String {
+//         if _date == nil{
+//             _date = ""
+//         }
+//         let dateFormatter = DateFormatter()
+//         dateFormatter.dateStyle = .long
+//         dateFormatter.timeStyle = .none
+//         let currentDate = dateFormatter.string(from: Date())
+//         self._date = "Today, \(currentDate)"
+//         return _date
+//     }
+
   func updateWeatherIcon(condition: Int) -> String {
 
     switch (condition) {
@@ -58,4 +70,21 @@ class WeatherDataModel {
     }
 
   }
+
+//  func date() -> Date? {
+//      if (timestamp == nil) {
+//          return nil
+//      }
+//      let ti = TimeInterval(timestamp!)
+//      return Date(timeIntervalSince1970: ti)
+//  }
+//
+//  func dateString(format: String) -> String {
+//      if let date = date() {
+//          let dateFormatter = DateFormatter()
+//          dateFormatter.dateFormat = format
+//          return dateFormatter.string(from: date)
+//      }
+//      return ""
+//  }
 }
