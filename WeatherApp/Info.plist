@@ -34,6 +34,11 @@
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We are using your current location to get you the weather</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

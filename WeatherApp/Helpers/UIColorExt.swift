@@ -27,3 +27,16 @@ extension UIColor {
     self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
   }
 }
+
+extension UIImage {
+  convenience init?(url: URL?) {
+    guard let url = url else { return nil }
+
+    do {
+      self.init(data: try Data(contentsOf: url))
+    } catch {
+      print("Cannot load image from url: \(url) with error: \(error)")
+      return nil
+    }
+  }
+}
