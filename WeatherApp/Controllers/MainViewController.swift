@@ -192,7 +192,21 @@ class MainViewController: UIViewController {
       self.mainImageView.image = self.weatherDataModel.updateWeatherIcon(condition: self.weatherDataModel.weatherIcon)
       self.mainView.currentTemperature.text = "\(self.weatherDataModel.temperature)°"
       self.mainView.maxTemperature.text = "\(self.weatherDataModel.maximumTemp)°"
+      self.secondContainerView.backgroundColor = self.changeViewBackgroundColor(weatherDescription: self.weatherDataModel.weatherIcon)
       self.mainView.minTemperature.text = "\(self.weatherDataModel.minimumTemp)°"
+    }
+  }
+
+  fileprivate func changeViewBackgroundColor(weatherDescription: String) -> UIColor {
+    switch weatherDescription {
+    case "Clouds":
+      return UIColor(hexString: "#54717a")
+    case "Clear":
+      return UIColor(hexString: "#47ab2f")
+    case "Rain":
+      return UIColor(hexString: "#57575d")
+    default:
+      return UIColor(hexString: "#47ab2f")
     }
   }
 
