@@ -21,6 +21,7 @@ class MainViewController: UIViewController {
 
   let locationManager = CLLocationManager()
   let weatherDataModel = WeatherDataModel()
+  let mainView = MainView()
 
   lazy var firstContainerView: UIView = {
     let view = UIView()
@@ -62,83 +63,6 @@ class MainViewController: UIViewController {
     return label
   }()
 
-  lazy var minTemperature: UILabel = {
-    let label = UILabel()
-    label.text = "19°"
-    label.textColor = .white
-    label.translatesAutoresizingMaskIntoConstraints = false
-    label.font = UIFont.systemFont(ofSize: 15.0)
-    return label
-  }()
-
-  lazy var minTemperatureLabel: UILabel = {
-    let label = UILabel()
-    label.text = "min"
-    label.textColor = .white
-    label.translatesAutoresizingMaskIntoConstraints = false
-    label.font = UIFont.systemFont(ofSize: 15.0)
-    return label
-  }()
-
-  lazy var currentTemperature: UILabel = {
-    let label = UILabel()
-    label.text = "24°"
-    label.textColor = .white
-    label.translatesAutoresizingMaskIntoConstraints = false
-    label.font = UIFont.systemFont(ofSize: 15.0)
-    return label
-  }()
-
-  lazy var currentTemperatureLabel: UILabel = {
-    let label = UILabel()
-    label.text = "current"
-    label.textColor = .white
-    label.translatesAutoresizingMaskIntoConstraints = false
-    label.font = UIFont.systemFont(ofSize: 15.0)
-    return label
-  }()
-
-  lazy var maxTemperature: UILabel = {
-    let label = UILabel()
-    label.text = "25°"
-    label.textColor = .white
-    label.translatesAutoresizingMaskIntoConstraints = false
-    label.font = UIFont.systemFont(ofSize: 15.0)
-    return label
-  }()
-
-  lazy var maxTemperatureLabel: UILabel = {
-    let label = UILabel()
-    label.text = "max"
-    label.textColor = .white
-    label.translatesAutoresizingMaskIntoConstraints = false
-    label.font = UIFont.systemFont(ofSize: 15.0)
-    return label
-  }()
-
-  lazy var lineView: UIView = {
-    let view = UIView()
-    view.backgroundColor = .white
-    view.translatesAutoresizingMaskIntoConstraints = false
-    return view
-  }()
-
-  lazy var dayOneImageView: UIImageView = {
-    let img = UIImageView()
-    img.contentMode = .scaleAspectFill
-    img.image = UIImage(named: "partlysunny")
-    img.translatesAutoresizingMaskIntoConstraints = false
-    return img
-  }()
-
-  lazy var dayTwoImageView: UIImageView = {
-    let img = UIImageView()
-    img.contentMode = .scaleAspectFill
-    img.image = UIImage(named: "partlysunny")
-    img.translatesAutoresizingMaskIntoConstraints = false
-    return img
-  }()
-
   lazy var collectionView: UICollectionView = {
     let layout = UICollectionViewFlowLayout()
     let cv = UICollectionView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), collectionViewLayout: layout)
@@ -150,25 +74,23 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
       view.backgroundColor = .white
-      locationManager.delegate = self
-      locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-      locationManager.requestWhenInUseAuthorization()
-      locationManager.startUpdatingLocation()
+      getUsersLocation()
 
-    
       collectionView.register(ForecastCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
       collectionView.delegate = self
       collectionView.dataSource = self
-
-      getPostFromNetwork { (json) in
-        debugPrint("results")
-      }
-
     }
 
   override func loadView() {
     super.loadView()
     setupView()
+  }
+
+  fileprivate func getUsersLocation() {
+    locationManager.delegate = self
+    locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+    locationManager.requestWhenInUseAuthorization()
+    locationManager.startUpdatingLocation()
   }
 
   fileprivate func setupView() {
@@ -193,8 +115,6 @@ class MainViewController: UIViewController {
       mainImageView.heightAnchor.constraint(equalTo: firstContainerView.heightAnchor)
     ])
 
-
-
     NSLayoutConstraint.activate([
       temparatureLabel.centerYAnchor.constraint(equalTo: firstContainerView.centerYAnchor),
       temparatureLabel.centerXAnchor.constraint(equalTo: firstContainerView.centerXAnchor)
@@ -208,14 +128,8 @@ class MainViewController: UIViewController {
 
   func setupLowerPartViews() {
     view.addSubview(secondContainerView)
-    secondContainerView.addSubview(minTemperature)
-    secondContainerView.addSubview(minTemperatureLabel)
-    secondContainerView.addSubview(currentTemperature)
-    secondContainerView.addSubview(currentTemperatureLabel)
-    secondContainerView.addSubview(maxTemperature)
-    secondContainerView.addSubview(maxTemperatureLabel)
-    secondContainerView.addSubview(lineView)
-
+    secondContainerView.addSubview(mainView)
+    mainView.translatesAutoresizingMaskIntoConstraints = false
     secondContainerView.addSubview(collectionView)
 
     NSLayoutConstraint.activate([
@@ -223,84 +137,46 @@ class MainViewController: UIViewController {
       secondContainerView.widthAnchor.constraint(equalTo: view.widthAnchor),
       secondContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
     ])
+
     NSLayoutConstraint.activate([
-      minTemperature.topAnchor.constraint(equalTo: secondContainerView.topAnchor),
-      minTemperature.leadingAnchor.constraint(equalTo: secondContainerView.leadingAnchor, constant: 10)
+      mainView.topAnchor.constraint(equalTo: secondContainerView.topAnchor),
+      mainView.heightAnchor.constraint(equalToConstant: 35),
+      mainView.trailingAnchor.constraint(equalTo: secondContainerView.trailingAnchor),
+      mainView.leadingAnchor.constraint(equalTo: secondContainerView.leadingAnchor)
     ])
+
     NSLayoutConstraint.activate([
-      minTemperatureLabel.topAnchor.constraint(equalTo: minTemperature.bottomAnchor),
-      minTemperatureLabel.leadingAnchor.constraint(equalTo: minTemperature.leadingAnchor)
-    ])
-    NSLayoutConstraint.activate([
-      currentTemperature.topAnchor.constraint(equalTo: secondContainerView.topAnchor),
-      currentTemperature.centerXAnchor.constraint(equalTo: secondContainerView.centerXAnchor)
-    ])
-    NSLayoutConstraint.activate([
-      currentTemperatureLabel.topAnchor.constraint(equalTo: currentTemperature.bottomAnchor),
-      currentTemperatureLabel.centerXAnchor.constraint(equalTo: currentTemperature.centerXAnchor)
-    ])
-    NSLayoutConstraint.activate([
-      maxTemperature.topAnchor.constraint(equalTo: secondContainerView.topAnchor),
-      maxTemperature.trailingAnchor.constraint(equalTo: secondContainerView.trailingAnchor, constant: -10)
-    ])
-    NSLayoutConstraint.activate([
-      maxTemperatureLabel.topAnchor.constraint(equalTo: maxTemperature.bottomAnchor),
-      maxTemperatureLabel.trailingAnchor.constraint(equalTo: maxTemperature.trailingAnchor)
-    ])
-    NSLayoutConstraint.activate([
-      lineView.topAnchor.constraint(equalTo: currentTemperatureLabel.bottomAnchor),
-      lineView.widthAnchor.constraint(equalTo: secondContainerView.widthAnchor),
-      lineView.heightAnchor.constraint(equalToConstant: 1)
-    ])
-    NSLayoutConstraint.activate([
-      collectionView.topAnchor.constraint(equalTo: lineView.bottomAnchor),
+      collectionView.topAnchor.constraint(equalTo: mainView.bottomAnchor),
       collectionView.leadingAnchor.constraint(equalTo: secondContainerView.leadingAnchor),
       collectionView.trailingAnchor.constraint(equalTo: secondContainerView.trailingAnchor),
       collectionView.bottomAnchor.constraint(equalTo: secondContainerView.bottomAnchor)
     ])
-
-
   }
 
-  fileprivate func getWeatherData(url: String, parameters: [String: String]) {
-    AF.request(url, method: .get, parameters: parameters).responseJSON { response in
-      switch response.result {
-      case .success:
-        let weatherJSON: JSON = JSON(response.data!)
-        self.updateWeatherData(json: weatherJSON)
-
-      case .failure(let error):
-        print("Error \(error)")
-        self.waetherLabel.text = "Connectivity Issues"
-      }
-    }
-  }
-
-  fileprivate func getPostFromNetwork(completionHandler: @escaping ([WeatherForecast]) -> Void) {
-    WebService.getForecast { (json) in
+  fileprivate func getWeatherForecast(_ params: [String: String], completionHandler: @escaping ([WeatherForecast]) -> Void) {
+    WebService.getForecast(params) { (json) in
       let results = Parse.parseForecastDetails(json: json)
       for all in results {
         self.weatherArray.append(all)
       }
-      self.collectionView.reloadData()
+      DispatchQueue.main.async {
+        self.collectionView.reloadData()
+      }
       completionHandler(results)
     }
   }
 
 
   fileprivate func updateWeatherData(json: JSON) {
-    if let tempResult = json["main"]["temp"].double {
-      let city = json["name"].stringValue
-      let condition = json["weather"][0]["id"].intValue
+    if let tempResult = json["main"]["temp"].double, let maxTempResult = json["main"]["temp_max"].double, let minTempResult = json["main"]["temp_min"].double {
+      let weatherIcon = json["weather"][0]["main"].stringValue
       let weatherStr = json["weather"][0]["main"].stringValue
-
 
       weatherDataModel.weatherDescription = weatherStr
       weatherDataModel.temperature = Int(tempResult - 273.15)
-      weatherDataModel.city = city
-      weatherDataModel.condition = condition
-
-      weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: weatherDataModel.condition)
+      weatherDataModel.maximumTemp = Int(maxTempResult - 273.15)
+      weatherDataModel.minimumTemp = Int(minTempResult - 273.15)
+      weatherDataModel.weatherIcon = weatherIcon
 
       updateUIWithWeatherData()
     } else {
@@ -310,10 +186,14 @@ class MainViewController: UIViewController {
 
 
   fileprivate func updateUIWithWeatherData() {
-    waetherLabel.text = weatherDataModel.weatherDescription
-    temparatureLabel.text = "\(weatherDataModel.temperature)°"
-    dayOneImageView.image = UIImage(named: weatherDataModel.weatherIcon)
-    //mainImageView.image = UIImage(named: weatherDataModel.weatherIcon)
+    DispatchQueue.main.async {
+      self.waetherLabel.text = self.weatherDataModel.weatherDescription
+      self.temparatureLabel.text = "\(self.weatherDataModel.temperature)°"
+      self.mainImageView.image = self.weatherDataModel.updateWeatherIcon(condition: self.weatherDataModel.weatherIcon)
+      self.mainView.currentTemperature.text = "\(self.weatherDataModel.temperature)°"
+      self.mainView.maxTemperature.text = "\(self.weatherDataModel.maximumTemp)°"
+      self.mainView.minTemperature.text = "\(self.weatherDataModel.minimumTemp)°"
+    }
   }
 
 }
@@ -326,10 +206,21 @@ extension MainViewController: CLLocationManagerDelegate {
       let latitude = String(location.coordinate.latitude)
       let longitude = String(location.coordinate.longitude)
       let params: [String: String] = ["lat": latitude, "lon": longitude, "appid": appID]
-      let testData = ["-1.28": latitude, "36.82": longitude]
-      getWeatherData(url: weatherURL, parameters: params)
 
+      //get weather
+      WebService.getWeather(params) { (json) in
+        self.updateWeatherData(json: json)
+        print("weather results")
+      }
+
+      //get forecast
+      WebService.getForecast(params) { (json) in
+        self.getWeatherForecast(params) { (json) in
+          print("forecast results")
+        }
+      }
     }
+
   }
   func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
     print(error)
@@ -348,14 +239,13 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ForecastCollectionViewCell
 
     cell.dayLabel.text = weatherArray[indexPath.row].dailyDate
-    let stringImage = weatherArray[indexPath.row].dailyIcon
-    let url = "http://openweathermap.org/img/wn/\(stringImage)@2x.png"
-
-
-    cell.dayImageView.image = UIImage(url: URL(string: url))
 
     let temp = Int(weatherArray[indexPath.row].dailyTemp - 273.15)
     cell.tempLabel.text = "\(temp)º"
+
+    let stringImage = weatherArray[indexPath.row].dailyIcon
+    let url = "http://openweathermap.org/img/wn/\(stringImage)@2x.png"
+    cell.dayImageView.image = UIImage(url: URL(string: url))
 
     return cell
   }
@@ -363,9 +253,5 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     return CGSize(width: collectionView.bounds.width, height: 50)
   }
-
-
-
-
 
 }

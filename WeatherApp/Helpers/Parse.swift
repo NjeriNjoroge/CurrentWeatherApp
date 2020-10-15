@@ -14,16 +14,17 @@ public class Parse {
 
   var forecast = [WeatherForecast]()
 
-      static func convertUtcToLocalTime (date :String) -> String{
-          let dateFormatterGet = DateFormatter()
-          dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
+  static func convertUtcToLocalTime (date :String) -> String {
 
-          let dateFormatterPrint = DateFormatter()
-          dateFormatterPrint.dateFormat = "cccc"
+    let dateFormatterGet = DateFormatter()
+    dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
 
-          let localeDate = dateFormatterGet.date(from: date)
-          return dateFormatterPrint.string(from: localeDate!)
-      }
+    let dateFormatterPrint = DateFormatter()
+    dateFormatterPrint.dateFormat = "cccc"
+
+    let localeDate = dateFormatterGet.date(from: date)
+    return dateFormatterPrint.string(from: localeDate!)
+  }
 
   static func parseForecastDetails(json: JSON) -> [WeatherForecast] {
 
@@ -33,7 +34,7 @@ public class Parse {
     forecastDeets.forEach { each in
 
       let weatherDate = each["dt_txt"].stringValue
-      let theDate = self.convertUtcToLocalTime(date: weatherDate as! String)
+      let theDate = self.convertUtcToLocalTime(date: weatherDate)
       let icon = each["weather"][0]["icon"].stringValue
       let maxTemp = each["main"]["temp_max"].doubleValue
 
@@ -41,10 +42,9 @@ public class Parse {
       let forecastObject = WeatherForecast(dailyTemp: maxTemp, dailyDate: theDate, dailyIcon: icon)
       
       if results.contains( where: { $0.dailyDate == forecastObject.dailyDate } ) == false {
-             results.append(forecastObject)
+            results.append(forecastObject)
          } 
     }
-
     return results
   }
 }
