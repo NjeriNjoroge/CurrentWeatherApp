@@ -11,9 +11,9 @@ import Foundation
 struct Constants {
 
     // ApiId for OpenWeatherMap
-    static let kAppId  = "0fd65ae8051cec4f21c386659c25955b"
+    static let appId  = ""
 
     //Urls
-    static let kBaseURL = "https://api.openweathermap.org/data/2.5/"
-    static let kForecastURL = "forecast?"
+    static let weatherURL = "https://api.openweathermap.org/data/2.5/weather"
+    static let weatherForecastURL = "https://api.openweathermap.org/data/2.5/forecast"
 }

@@ -6,7 +6,6 @@
 //  Copyright © 2020 Grace. All rights reserved.
 //
 
-import Foundation
 import Alamofire
 import SwiftyJSON
 
@@ -16,7 +15,7 @@ public class WebService {
 
     let requestName = "GetForecast"
 
-    AF.request("https://api.openweathermap.org/data/2.5/forecast", method: .get, parameters: params).responseJSON { response in
+    AF.request(Constants.weatherForecastURL, method: .get, parameters: params).responseJSON { response in
 
       switch response.result {
 
@@ -42,7 +41,7 @@ public class WebService {
 
     let requestName = "GetWeather"
 
-    AF.request("https://api.openweathermap.org/data/2.5/weather", method: .get, parameters: params).responseJSON { response in
+    AF.request(Constants.weatherURL, method: .get, parameters: params).responseJSON { response in
 
       switch response.result {
 

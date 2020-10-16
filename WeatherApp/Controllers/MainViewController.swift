@@ -13,10 +13,8 @@ import SwiftyJSON
 
 class MainViewController: UIViewController {
 
-  let weatherURL = "https://api.openweathermap.org/data/2.5/weather"
-  let fiveDayForecast = "https://api.openweathermap.org/data/2.5/forecast"
-  let appID = "0fd65ae8051cec4f21c386659c25955b"
-  private let spacing:CGFloat = 16.0
+  let appID = Constants.appId
+
   var weatherArray = [WeatherForecast]()
 
   let locationManager = CLLocationManager()
@@ -153,7 +151,7 @@ class MainViewController: UIViewController {
     ])
   }
 
-  fileprivate func getWeatherForecast(_ params: [String: String], completionHandler: @escaping ([WeatherForecast]) -> Void) {
+   func getWeatherForecast(_ params: [String: String], completionHandler: @escaping ([WeatherForecast]) -> Void) {
     WebService.getForecast(params) { (json) in
       let results = Parse.parseForecastDetails(json: json)
       for all in results {

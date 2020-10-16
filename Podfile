@@ -7,7 +7,13 @@ target 'WeatherApp' do
 
   # Pods for WeatherApp
 
-	pod 'Alamofire', '~> 5.0.0-beta.5'
+	pod 'Alamofire'
 	pod 'SwiftyJSON', '~> 4.0'
 
+end
+
+target 'WeatherAppTests' do
+ use_frameworks!
+    pod 'Alamofire'
+    pod 'SwiftyJSON', '~> 4.0'
 end
