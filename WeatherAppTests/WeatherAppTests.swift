@@ -47,7 +47,7 @@ extension WeatherAppTests {
   func testApiForecastEndPointWorks() {
     
     let exp = self.expectation(description: "get forecast")
-    let params = ["lat": "55.7", "lon": "37.6", "appid": "0fd65ae8051cec4f21c386659c25955b"]
+    let params = ["lat": "55.7", "lon": "37.6", "appid": ""]
     WebService.getForecast(params) { (json) in
       if json == nil {
         XCTFail()
